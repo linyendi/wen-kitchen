@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-// --- 全新的生成式 AI 插畫網址 (符合智慧財產權，專為溫灶咖設計) ---
-// 頭部兩側的插畫 (雞蛋糕與茶壺)
-const HEADER_ILLUST = 'https://ai-paper-shelf.s3.us-west-2.amazonaws.com/wen_kitchen/header_illust.png'; 
-// 商品分類卡片的小圖示 (雞蛋、蛋糕、茶杯)
+// --- 使用高穩定性的開源圖片 (Unsplash) ---
+// 頭部背景：溫馨的廚房桌案
+const HEADER_BG = 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=1200';
+// 分類圖示：雞蛋、甜點、茶飲
 const CAT_ICONS = [
-  'https://ai-paper-shelf.s3.us-west-2.amazonaws.com/wen_kitchen/icon_egg.png',
-  'https://ai-paper-shelf.s3.us-west-2.amazonaws.com/wen_kitchen/icon_cake.png',
-  'https://ai-paper-shelf.s3.us-west-2.amazonaws.com/wen_kitchen/icon_tea.png'
+  'https://cdn-icons-png.flaticon.com/512/837/837713.png', // 雞蛋 (雞蛋燒)
+  'https://cdn-icons-png.flaticon.com/512/2682/2682442.png', // 蛋糕 (雞蛋糕)
+  'https://cdn-icons-png.flaticon.com/512/3504/3504827.png'  // 茶 (呷涼的)
 ];
-// 尾部店家資訊旁邊的插畫 (可愛告示牌風)
-const FOOTER_ILLUST = 'https://ai-paper-shelf.s3.us-west-2.amazonaws.com/wen_kitchen/footer_illust.png';
-
-// 網頁背景圖 (淡淡的紙張紋理)
-const PAPER_TEXTURE = 'https://ai-paper-shelf.s3.us-west-2.amazonaws.com/wen_kitchen/paper_texture.png';
+// 尾部背景：小店溫馨氛圍
+const FOOTER_BG = 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&q=80&w=800';
 
 function App() {
   const [data, setData] = useState({ menu: [], shopInfo: {} });
@@ -32,164 +29,115 @@ function App() {
       });
   }, []);
 
-  // --- 現代日系風格 CSS 設計 ---
   const styles = {
-    // 整體背景：紙張紋理，營造溫暖感
     wrapper: {
       minHeight: '100vh',
       backgroundColor: '#fdfcf8',
-      backgroundImage: `url(${PAPER_TEXTURE})`, 
-      backgroundSize: '200px', // 讓紋理細緻一點
-      fontFamily: '"Noto Sans TC", sans-serif', 
+      fontFamily: '"Noto Sans TC", sans-serif',
       color: '#444',
       margin: 0,
       padding: 0,
+    },
+    // 1. 頭部設計
+    header: {
+      height: '350px',
+      backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${HEADER_BG})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
       display: 'flex',
       flexDirection: 'column',
-    },
-
-    // 1. 頭部區塊 (Header)
-    header: {
-      textAlign: 'center',
-      padding: '60px 20px',
-      position: 'relative',
-      backgroundImage: `url(${HEADER_ILLUST})`, // 頭部插畫背景
-      backgroundSize: 'contain',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: '#fff',
     },
     title: { 
-      color: '#b71c1c', 
-      fontSize: '4.5rem', // 再次放大字體！
+      fontSize: '4.5rem', 
       margin: 0, 
-      fontWeight: '900',
+      fontWeight: '900', 
       letterSpacing: '15px',
-      textShadow: '2px 2px 4px rgba(0,0,0,0.1)', // 加上一點點陰影，更有質感
+      textShadow: '3px 3px 6px rgba(0,0,0,0.5)'
     },
-    subTitle: { color: '#8d7765', fontSize: '1.1rem', marginTop: '10px' },
+    subTitle: { fontSize: '1.2rem', marginTop: '10px', opacity: 0.9 },
 
-    // 2. 主體區塊 (Main) - 採用格狀佈局 (Grid) 讓卡片並列
+    // 2. 主體卡片設計
     main: {
-      flex: 1, // 撐開中間區域
-      maxWidth: '1200px', // 限制最大寬度，防止在大螢幕上拉得太開
-      margin: '0 auto',
-      padding: '40px 20px',
-      width: '100%',
-      boxSizing: 'border-box',
+      maxWidth: '1200px',
+      margin: '-50px auto 60px', // 讓卡片往上蓋過頭部一點點
+      padding: '0 20px',
     },
-    // 商品卡片格狀容器
     cardGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', // 關鍵：自動適應排版
-      gap: '30px', // 卡片之間的間距
+      gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+      gap: '25px',
     },
-    // 商品卡片樣式
     card: {
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      backgroundColor: '#fff',
       borderRadius: '20px',
       padding: '30px',
-      border: '2px solid #e0e0e0',
-      boxShadow: '0 8px 16px rgba(0,0,0,0.05)',
-      display: 'flex',
-      flexDirection: 'column',
-      position: 'relative', // 為了定位小圖示
-      transition: 'transform 0.3s ease', // 加上一點滑鼠懸停效果
-      cursor: 'default',
+      boxShadow: '0 10px 25px rgba(0,0,0,0.08)',
+      border: '1px solid #eee',
     },
-    // 卡片內部的分類標題
     cardHeader: {
       display: 'flex',
       alignItems: 'center',
       marginBottom: '20px',
+      borderBottom: '2px solid #a63a3a',
       paddingBottom: '10px',
-      borderBottom: '2px solid #8d7765',
     },
-    cardIcon: {
-      width: '40px',
-      height: '40px',
-      marginRight: '15px',
-    },
-    cardTitle: {
-      color: '#5d4037',
-      fontSize: '1.5rem',
-      margin: 0,
-      fontWeight: 'bold',
-    },
+    cardIcon: { width: '40px', height: '40px', marginRight: '15px' },
+    cardTitle: { color: '#a63a3a', fontSize: '1.6rem', margin: 0 },
 
-    // 卡片內部的商品項目
-    itemRow: { marginBottom: '15px', display: 'flex', flexDirection: 'column' },
-    itemMain: { display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' },
+    // 品項樣式
+    itemRow: { marginBottom: '18px' },
+    itemMain: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
     itemName: { fontWeight: 'bold', fontSize: '1.1rem' },
-    itemNote: { color: '#999', fontSize: '0.85rem', marginLeft: '6px', fontWeight: 'normal' },
-    itemPrice: { fontWeight: 'bold', color: '#b71c1c', fontSize: '1.1rem', marginLeft: '10px' },
-    itemOptions: { color: '#8d7765', fontSize: '0.85rem', marginTop: '3px' },
+    itemNote: { color: '#999', fontSize: '0.85rem', marginLeft: '5px' },
+    itemPrice: { fontWeight: 'bold', color: '#a63a3a', fontSize: '1.2rem' },
+    itemOptions: { color: '#8d7765', fontSize: '0.85rem', marginTop: '4px' },
 
-    // 3. 尾部區塊 (Footer) - 店家資訊設計
+    // 3. 尾部設計
     footer: {
-      marginTop: 'auto', // 保持在最底部
+      backgroundColor: '#2c2c2c',
+      color: '#fff',
       padding: '60px 20px',
-      backgroundColor: '#f1ede4', // 比底色深一點的米色
-      borderTop: '3px solid #b71c1c',
       textAlign: 'center',
+      backgroundImage: `linear-gradient(rgba(44,44,44,0.85), rgba(44,44,44,0.85)), url(${FOOTER_BG})`,
+      backgroundSize: 'cover',
     },
-    footerContainer: {
-      maxWidth: '600px',
-      margin: '0 auto',
-      position: 'relative',
-      paddingRight: '120px', // 留空間給插畫
-    },
-    footerIllust: {
-      position: 'absolute',
-      right: '-20px',
-      bottom: '-10px',
-      width: '150px',
-      height: '150px',
-    },
-    footerTitle: {
-      color: '#b71c1c',
-      fontWeight: 'bold',
-      fontSize: '1.2rem',
-      marginBottom: '15px',
-    },
-    footerText: { margin: '8px 0', fontSize: '1rem', color: '#555' },
+    footerContent: { maxWidth: '600px', margin: '0 auto' },
+    footerTitle: { color: '#fdfcf8', fontSize: '1.4rem', marginBottom: '20px' },
+    footerLine: { margin: '10px 0', opacity: 0.8 },
     lineNotice: {
       display: 'inline-block',
-      border: '2px solid #5d4037',
-      padding: '5px 15px',
-      borderRadius: '10px',
-      color: '#5d4037',
+      padding: '8px 25px',
+      border: '1px solid #fff',
+      borderRadius: '30px',
+      marginTop: '20px',
       fontWeight: 'bold',
-      marginTop: '15px',
     }
   };
 
   if (loading) return (
-    <div style={{height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fdfcf8', color: '#b71c1c', fontSize: '1.2rem'}}>
-      🏮 溫灶咖正在生火加熱中...
+    <div style={{height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fdfcf8'}}>
+      🏮 溫灶咖正在生火中...
     </div>
   );
 
   return (
     <div style={styles.wrapper}>
-      {/* 1. 頭部區塊 */}
       <header style={styles.header}>
         <h1 style={styles.title}>溫 灶 咖</h1>
-        <p style={styles.subHeader}>ベビーカステラ</p>
+        <p style={styles.subTitle}>ベビーカステラ | 手作雞蛋糕</p>
       </header>
 
-      {/* 2. 主體區塊 */}
       <main style={styles.main}>
         <div style={styles.cardGrid}>
           {data.menu && data.menu.map((cat, idx) => (
-            // 分類卡片
             <div key={idx} style={styles.card}>
-              {/* 卡片頭部：插畫小圖示 + 標題 */}
               <div style={styles.cardHeader}>
                 <img src={CAT_ICONS[idx % CAT_ICONS.length]} alt="icon" style={styles.cardIcon} />
                 <h2 style={styles.cardTitle}>{cat.category}</h2>
               </div>
-
-              {/* 卡片內容：商品清單 */}
               {cat.items && cat.items.map((item, i) => (
                 <div key={i} style={styles.itemRow}>
                   <div style={styles.itemMain}>
@@ -199,11 +147,8 @@ function App() {
                     </span>
                     <span style={styles.itemPrice}>{item.price ? `$${item.price}` : '--'}</span>
                   </div>
-                  {/* 顯示選填選項 */}
                   {item.options && item.options.length > 0 && (
-                    <small style={styles.itemOptions}>
-                      ○ {item.options.join(' / ')}
-                    </small>
+                    <div style={styles.itemOptions}>○ {item.options.join(' / ')}</div>
                   )}
                 </div>
               ))}
@@ -212,15 +157,12 @@ function App() {
         </div>
       </main>
 
-      {/* 3. 尾部區塊 */}
       <footer style={styles.footer}>
-        <div style={styles.footerContainer}>
-          {/* 尾部告示牌風插畫 */}
-          <img src={FOOTER_ILLUST} alt="illust" style={styles.footerIllust} />
-          <p style={styles.footerTitle}>{data.shopInfo.description}</p>
-          <p style={styles.footerText}>📍 店址：{data.shopInfo.address}</p>
-          <div style={styles.lineNotice}>{data.shopInfo.lineNotice}</div>
-          <p style={{fontSize: '0.8rem', color: '#aaa', marginTop: '20px'}}>© 2026 Wen Kitchen</p>
+        <div style={styles.footerContent}>
+          <h3 style={styles.footerTitle}>{data.shopInfo.description}</h3>
+          <p style={styles.footerLine}>📍 店址：{data.shopInfo.address}</p>
+          <div style={styles.lineNotice}>|| {data.shopInfo.lineNotice} ||</div>
+          <p style={{fontSize: '0.8rem', marginTop: '30px', opacity: 0.5}}>© 2026 Wen Kitchen</p>
         </div>
       </footer>
     </div>
