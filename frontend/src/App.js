@@ -26,19 +26,18 @@ function App() {
   const styles = {
     wrapper: {
       minHeight: '100vh',
-      // 加深遮罩，增加溫潤感
-      backgroundImage: `linear-gradient(rgba(253, 252, 248, 0.95), rgba(253, 252, 248, 0.95)), url(${BACKGROUND_IMG})`,
+      // 修改：漸層背景增加層次感 (由暖米色到象牙白)
+      backgroundImage: `linear-gradient(to bottom, #fdf5e6 0%, rgba(253, 252, 248, 0.96) 50%, #fff 100%), url(${BACKGROUND_IMG})`,
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
       fontFamily: '"Noto Sans TC", sans-serif',
       color: '#5d4037',
-      overflowX: 'hidden'
     },
     header: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '80px 20px 40px',
+      padding: '70px 20px 30px',
     },
     main: { maxWidth: '1200px', margin: '0 auto', padding: '0 20px' },
     cardGrid: {
@@ -47,25 +46,39 @@ function App() {
       gap: '40px',
     },
     card: {
-      // 改為米色半透明，增加融合度
-      backgroundColor: 'rgba(254, 250, 243, 0.75)', 
+      backgroundColor: 'rgba(255, 253, 249, 0.8)', 
       borderRadius: '30px',
       padding: '35px',
-      boxShadow: '0 10px 40px rgba(166, 58, 58, 0.05)',
-      border: '1px solid rgba(255, 255, 255, 0.6)',
-      backdropFilter: 'blur(10px)', // 毛玻璃效果提升質感
+      boxShadow: '0 15px 35px rgba(166, 58, 58, 0.06)',
+      border: '1px solid rgba(166, 58, 58, 0.05)',
+      backdropFilter: 'blur(8px)',
       transition: 'all 0.4s ease',
-      animation: 'fadeInUp 1s ease backwards',
     },
-    // 底部背景羽化融合
-    footerContainer: {
-      position: 'relative',
+    // 新的底部佈局設計
+    footer: {
+      marginTop: '100px',
+      padding: '60px 20px 100px',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    footerLayout: {
+      maxWidth: '900px',
       width: '100%',
-      maxWidth: '750px',
-      margin: '0 auto',
-      maskImage: 'radial-gradient(circle, black 65%, transparent 100%)',
-      WebkitMaskImage: 'radial-gradient(circle, black 65%, transparent 100%)',
-      opacity: 0.8
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: 'rgba(255, 255, 255, 0.4)',
+      borderRadius: '40px',
+      padding: '40px',
+      flexWrap: 'wrap',
+      gap: '30px',
+      border: '1px solid rgba(255, 255, 255, 0.6)',
+    },
+    footerInfo: { flex: '1 1 300px', textAlign: 'left' },
+    footerImgBox: { 
+      flex: '0 1 350px',
+      maskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
+      WebkitMaskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
     }
   };
 
@@ -74,29 +87,21 @@ function App() {
   return (
     <div style={styles.wrapper}>
       <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .arc-title { fill: #a63a3a; font-weight: 900; letter-spacing: 12px; font-size: 50px; }
-        .decoration-line { stroke: #a63a3a; stroke-width: 2; opacity: 0.4; }
+        .arc-title { fill: #a63a3a; font-weight: 900; letter-spacing: 12px; font-size: 52px; }
+        .deco-line { stroke: #a63a3a; stroke-width: 2; opacity: 0.3; stroke-dasharray: 5, 5; }
       `}</style>
 
       <header style={styles.header}>
-        {/* 在標題兩側增加裝飾線條，撐開空間 */}
-        <svg width="800" height="180" viewBox="0 0 800 180" style={{maxWidth: '100%'}}>
-          {/* 左側裝飾 */}
-          <path className="decoration-line" d="M 50,140 Q 150,140 200,120" fill="transparent" />
-          {/* 弧形標題 */}
-          <path id="curve" fill="transparent" d="M 250,150 A 150,100 0 0,1 550,150" />
+        <svg width="800" height="160" viewBox="0 0 800 160" style={{maxWidth: '100%'}}>
+          <path className="deco-line" d="M 50,120 Q 150,120 220,100" fill="transparent" />
+          <path id="curve" fill="transparent" d="M 250,130 A 150,90 0 0,1 550,130" />
           <text className="arc-title">
             <textPath href="#curve" startOffset="50%" textAnchor="middle">溫 灶 咖</textPath>
           </text>
-          {/* 右側裝飾 */}
-          <path className="decoration-line" d="M 600,120 Q 650,140 750,140" fill="transparent" />
+          <path className="deco-line" d="M 580,100 Q 650,120 750,120" fill="transparent" />
         </svg>
-        <p style={{color:'#8d7765', letterSpacing:'5px', fontWeight:'bold', marginTop:'-30px'}}>
-          ベビーカステラ | 手作雞蛋糕
+        <p style={{color:'#8d7765', letterSpacing:'4px', fontWeight:'bold', marginTop:'-15px'}}>
+          ベビーカステラ | 手作雞蛋糕專賣
         </p>
       </header>
 
@@ -105,19 +110,19 @@ function App() {
           {data.menu && data.menu.map((cat, idx) => (
             <div 
               key={idx} 
-              style={{...styles.card, animationDelay: `${idx * 0.2}s`}}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-12px)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              style={styles.card}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-10px)'; e.currentTarget.style.backgroundColor = 'rgba(255, 253, 249, 0.95)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.backgroundColor = 'rgba(255, 253, 249, 0.8)'; }}
             >
-              <div style={{display:'flex', alignItems:'center', marginBottom:'25px', borderBottom:'2px solid #a63a3a', paddingBottom:'12px'}}>
-                <img src={CAT_ICONS[idx]} alt="icon" style={{width:'55px', height:'55px', marginRight:'15px', borderRadius:'50%'}} />
+              <div style={{display:'flex', alignItems:'center', marginBottom:'25px', borderBottom:'2.5px solid #a63a3a', paddingBottom:'12px'}}>
+                <img src={CAT_ICONS[idx]} alt="icon" style={{width:'55px', height:'55px', marginRight:'15px', borderRadius:'50%', boxShadow:'0 4px 8px rgba(0,0,0,0.1)'}} />
                 <h2 style={{fontSize:'1.6rem', margin:0, fontWeight:'900'}}>{cat.category}</h2>
               </div>
               {cat.items && cat.items.map((item, i) => (
                 <div key={i} style={{marginBottom:'20px'}}>
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline'}}>
                     <span>
-                      <span style={{fontWeight:'bold', fontSize:'1.1rem'}}>{item.name}</span>
+                      <span style={{fontWeight:'700', fontSize:'1.1rem'}}>{item.name}</span>
                       <small style={{color:'#999', marginLeft:'8px'}}>{item.note}</small>
                     </span>
                     <span style={{fontWeight:'900', color:'#a63a3a'}}>${item.price || '--'}</span>
@@ -131,13 +136,20 @@ function App() {
           ))}
         </div>
 
-        <footer style={{marginTop:'120px', paddingBottom:'80px'}}>
-          <div style={styles.footerContainer}>
-            <img src={FOOTER_BG} alt="footer" style={{width:'100%', borderRadius:'40px'}} />
-            <div style={{position:'absolute', textAlign:'center', width:'75%', textShadow:'0 0 10px white'}}>
-              <p style={{fontSize:'1.3em', color:'#a63a3a', fontWeight:'bold'}}>{data.shopInfo.description}</p>
-              <p>📍 {data.shopInfo.address}</p>
-              <p style={{fontSize:'1.2em', fontWeight:'bold'}}>|| {data.shopInfo.lineNotice} ||</p>
+        <footer style={styles.footer}>
+          <div style={styles.footerLayout}>
+            {/* 左側：清楚的店家資訊 */}
+            <div style={styles.footerInfo}>
+              <h3 style={{fontSize:'1.6rem', color:'#a63a3a', marginBottom:'15px', fontWeight:'900'}}>{data.shopInfo.description}</h3>
+              <p style={{fontSize:'1.1rem', margin:'10px 0'}}>📍 店址：{data.shopInfo.address}</p>
+              <div style={{display:'inline-block', backgroundColor:'#a63a3a', color:'#fff', padding:'8px 20px', borderRadius:'12px', marginTop:'15px', fontWeight:'bold'}}>
+                📲 {data.shopInfo.lineNotice}
+              </div>
+              <p style={{fontSize:'0.8rem', color:'#bbb', marginTop:'30px'}}>© 2026 Wen Kitchen 溫灶咖</p>
+            </div>
+            {/* 右側：品牌插圖點綴 */}
+            <div style={styles.footerImgBox}>
+              <img src={FOOTER_BG} alt="footer illust" style={{width:'100%', borderRadius:'20px'}} />
             </div>
           </div>
         </footer>
