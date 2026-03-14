@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// --- 圖片網址保持不變 ---
 const BACKGROUND_IMG = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/background.jpeg';
 const ICON_EGG_YAKI = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/cake_yaki.jpeg';
 const ICON_EGG_CAKE = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/cake_normal.jpeg';
@@ -20,109 +19,98 @@ function App() {
         setData(result);
         setLoading(false);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
+      .catch(error => console.error('Error:', error));
   }, []);
 
   const styles = {
     wrapper: {
       minHeight: '100vh',
-      backgroundImage: `linear-gradient(rgba(253, 252, 248, 0.93), rgba(253, 252, 248, 0.93)), url(${BACKGROUND_IMG})`,
+      backgroundImage: `linear-gradient(rgba(253, 252, 248, 0.94), rgba(253, 252, 248, 0.94)), url(${BACKGROUND_IMG})`,
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
-      fontFamily: '"Noto Sans TC", "Microsoft JhengHei", sans-serif',
+      fontFamily: '"Noto Sans TC", sans-serif',
       color: '#5d4037',
-      paddingBottom: '100px'
+      overflowX: 'hidden'
     },
+    // --- 弧形標題區塊 ---
     header: {
-      textAlign: 'center',
-      padding: '80px 20px 40px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '60px 20px 20px',
     },
-    title: { 
-      fontSize: '4.5rem', 
-      color: '#a63a3a', 
-      margin: 0, 
-      fontWeight: '900', 
-      letterSpacing: '12px' 
-    },
-    main: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '0 20px',
-    },
+    main: { maxWidth: '1200px', margin: '0 auto', padding: '0 20px' },
     cardGrid: {
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-      gap: '30px',
+      gap: '35px',
     },
+    // --- 卡片與動畫效果 ---
     card: {
-      backgroundColor: 'rgba(255, 255, 255, 0.85)',
-      borderRadius: '25px',
+      backgroundColor: 'rgba(255, 255, 255, 0.88)',
+      borderRadius: '28px',
       padding: '30px',
-      boxShadow: '0 8px 30px rgba(166, 58, 58, 0.05)',
-      border: '1px solid rgba(255, 255, 255, 0.5)',
-      transition: 'transform 0.3s ease'
+      boxShadow: '0 8px 30px rgba(166, 58, 58, 0.04)',
+      border: '1px solid rgba(255, 255, 255, 0.6)',
+      transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
+      animation: 'fadeInUp 0.8s ease backwards',
     },
-    cardHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      marginBottom: '20px',
-      borderBottom: '2px solid #a63a3a',
-      paddingBottom: '10px',
-    },
-    cardIcon: { width: '50px', height: '50px', marginRight: '15px', borderRadius: '50%' },
-    cardTitle: { fontSize: '1.6rem', margin: 0, fontWeight: '800' },
-
-    itemRow: { marginBottom: '18px' },
-    itemMain: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
-    itemName: { fontWeight: '700', fontSize: '1.1rem' },
-    itemPrice: { fontWeight: 'bold', color: '#a63a3a', fontSize: '1.1rem' },
-
-    // --- 底部重新設計：取消白霧遮罩，改用文字描邊 ---
+    // --- 底部無縫融入設計 ---
     footer: {
-      marginTop: '120px',
+      marginTop: '100px',
       display: 'flex',
       justifyContent: 'center',
-      padding: '0 20px'
+      padding: '0 20px 80px'
     },
     footerContainer: {
       position: 'relative',
       width: '100%',
-      maxWidth: '700px',
+      maxWidth: '650px',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
-    },
-    footerImg: {
-      width: '100%',
-      height: 'auto',
-      borderRadius: '30px',
-      opacity: 0.6, // 降低透明度讓它更像背景
-      filter: 'grayscale(20%)'
+      alignItems: 'center',
+      // 讓底圖邊緣羽化，完美融入背景
+      maskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
+      WebkitMaskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
     },
     footerOverlay: {
       position: 'absolute',
       textAlign: 'center',
-      width: '85%',
+      width: '80%',
       color: '#5d4037',
-      // 使用 Text-Shadow 代替白霧遮罩，確保文字清晰但不擋圖
-      textShadow: '2px 2px 4px rgba(255,255,255,0.9), -2px -2px 4px rgba(255,255,255,0.9), 2px -2px 4px rgba(255,255,255,0.9), -2px 2px 4px rgba(255,255,255,0.9)',
+      textShadow: '0 0 10px rgba(255,255,255,1), 0 0 5px rgba(255,255,255,0.8)',
       fontWeight: 'bold',
       lineHeight: '2.2',
-      fontSize: 'clamp(0.9rem, 2.8vw, 1.2rem)'
+      fontSize: 'clamp(0.9rem, 2.5vw, 1.15rem)'
     }
   };
 
-  if (loading) return <div style={{textAlign:'center', marginTop:'100px', fontSize:'1.5rem', color:'#a63a3a'}}>🏮 溫灶咖生火中...</div>;
+  if (loading) return <div style={{textAlign:'center', marginTop:'100px', fontSize:'1.2rem'}}>🏮 正在為您暖鍋中...</div>;
 
   return (
     <div style={styles.wrapper}>
+      {/* 注入動畫 CSS */}
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .arc-title { fill: #a63a3a; font-weight: 900; letter-spacing: 12px; font-size: 55px; }
+      `}</style>
+
       <header style={styles.header}>
-        <h1 style={styles.title}>溫 灶 咖</h1>
-        <p style={{color:'#8d7765', letterSpacing:'4px', fontWeight:'bold'}}>ベビーカステラ | 手作雞蛋糕</p>
+        {/* --- 使用 SVG 製作弧形店名 --- */}
+        <svg width="500" height="180" viewBox="0 0 500 180">
+          <path id="curve" fill="transparent" d="M 50,150 A 250,150 0 0,1 450,150" />
+          <text className="arc-title">
+            <textPath href="#curve" startOffset="50%" textAnchor="middle">
+              溫 灶 咖
+            </textPath>
+          </text>
+        </svg>
+        <p style={{color:'#8d7765', letterSpacing:'5px', fontWeight:'bold', marginTop:'-20px'}}>
+          ベビーカステラ | 手作雞蛋糕
+        </p>
       </header>
 
       <main style={styles.main}>
@@ -130,25 +118,31 @@ function App() {
           {data.menu && data.menu.map((cat, idx) => (
             <div 
               key={idx} 
-              style={styles.card}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              style={{...styles.card, animationDelay: `${idx * 0.2}s`}}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 15px 45px rgba(166, 58, 58, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = styles.card.boxShadow;
+              }}
             >
-              <div style={styles.cardHeader}>
-                <img src={CAT_ICONS[idx]} alt="icon" style={styles.cardIcon} />
-                <h2 style={styles.cardTitle}>{cat.category}</h2>
+              <div style={{display:'flex', alignItems:'center', marginBottom:'20px', borderBottom:'2px solid #a63a3a', paddingBottom:'10px'}}>
+                <img src={CAT_ICONS[idx]} alt="icon" style={{width:'50px', height:'50px', marginRight:'15px', borderRadius:'50%'}} />
+                <h2 style={{fontSize:'1.6rem', margin:0}}>{cat.category}</h2>
               </div>
               {cat.items && cat.items.map((item, i) => (
-                <div key={i} style={styles.itemRow}>
-                  <div style={styles.itemMain}>
+                <div key={i} style={{marginBottom:'18px'}}>
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline'}}>
                     <span>
-                      <span style={styles.itemName}>{item.name}</span>
+                      <span style={{fontWeight:'700'}}>{item.name}</span>
                       <small style={{color:'#999', marginLeft:'6px'}}>{item.note}</small>
                     </span>
-                    <span style={styles.itemPrice}>${item.price || '--'}</span>
+                    <span style={{fontWeight:'bold', color:'#a63a3a'}}>${item.price || '--'}</span>
                   </div>
                   {item.options && (
-                    <div style={{fontSize:'0.85rem', color:'#8d7765', marginTop:'3px'}}>○ {item.options.join(' / ')}</div>
+                    <div style={{fontSize:'0.85rem', color:'#8d7765', marginTop:'4px'}}>○ {item.options.join(' / ')}</div>
                   )}
                 </div>
               ))}
@@ -158,12 +152,12 @@ function App() {
 
         <footer style={styles.footer}>
           <div style={styles.footerContainer}>
-            <img src={FOOTER_BG} alt="footer" style={styles.footerImg} />
+            <img src={FOOTER_BG} alt="footer" style={{width:'100%', borderRadius:'40px', opacity:0.75}} />
             <div style={styles.footerOverlay}>
               <p style={{fontSize: '1.3em', color: '#a63a3a', marginBottom: '10px'}}>{data.shopInfo.description}</p>
               <p>📍 {data.shopInfo.address}</p>
               <p style={{fontSize: '1.2em', color: '#a63a3a'}}>|| {data.shopInfo.lineNotice} ||</p>
-              <p style={{fontSize: '0.7em', color: '#999', marginTop: '20px'}}>© 2026 Wen Kitchen 溫灶咖</p>
+              <p style={{fontSize: '0.7em', color: '#999', marginTop: '20px'}}>© 2026 Wen Kitchen</p>
             </div>
           </div>
         </footer>
