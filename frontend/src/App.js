@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-// --- 使用你上傳的 GitHub Raw 圖片網址 ---
-const HEADER_BG = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/_f5af5eaa-7bb3-474f-88ab-3fa8477894e9.jpeg';
-const CAT_ICON_ALL = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/_2766c5b7-c1cd-46da-ac3f-4fe6133eef3a.jpeg';
-const FOOTER_ILLUST = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/_c9abdb00-30cc-400a-9b42-39d2046eaa33.jpeg';
+// --- 圖片 Raw 網址 ---
+const BACKGROUND_IMG = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/background.jpeg';
+const ICON_EGG_YAKI = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/cake_yaki.jpeg';
+const ICON_EGG_CAKE = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/cake_normal.jpeg';
+const ICON_DRINK = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/drink.jpeg';
+const FOOTER_BG = 'https://raw.githubusercontent.com/linyendi/wen-kitchen/main/frontend/public/image/_c9abdb00-30cc-400a-9b42-39d2046eaa33.jpeg';
+
+// 將圖示放入陣列方便對應
+const CAT_ICONS = [ICON_EGG_YAKI, ICON_EGG_CAKE, ICON_DRINK];
 
 function App() {
   const [data, setData] = useState({ menu: [], shopInfo: {} });
@@ -25,40 +30,29 @@ function App() {
   const styles = {
     wrapper: {
       minHeight: '100vh',
-      backgroundColor: '#fdfcf8',
-      fontFamily: '"Noto Sans TC", "Microsoft JhengHei", sans-serif',
-      color: '#444',
-      margin: 0,
-      padding: 0,
-    },
-    // 1. 頭部設計：確保插圖在兩側
-    header: {
-      height: '300px',
-      backgroundImage: `url(${HEADER_BG})`,
-      backgroundSize: 'contain', // 確保插圖不被切掉
+      // 設定全螢幕背景圖，固定不動 (Fixed)
+      backgroundImage: `linear-gradient(rgba(253, 252, 248, 0.9), rgba(253, 252, 248, 0.9)), url(${BACKGROUND_IMG})`,
+      backgroundSize: 'cover',
       backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundColor: '#fdfcf8',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingTop: '20px'
+      backgroundAttachment: 'fixed',
+      fontFamily: '"Noto Sans TC", sans-serif',
+      color: '#444',
+      paddingBottom: '60px'
+    },
+    header: {
+      textAlign: 'center',
+      padding: '80px 20px',
     },
     title: { 
-      fontSize: '4.2rem', 
+      fontSize: '4.5rem', 
+      color: '#a63a3a', 
       margin: 0, 
       fontWeight: '900', 
-      letterSpacing: '12px',
-      color: '#a63a3a',
-      textShadow: '2px 2px 0px #fff, -2px -2px 0px #fff, 2px -2px 0px #fff, -2px 2px 0px #fff' // 文字白邊增加可讀性
+      letterSpacing: '15px' 
     },
-    subTitle: { fontSize: '1.1rem', marginTop: '5px', color: '#8d7765', fontWeight: 'bold' },
-
-    // 2. 主體卡片設計
     main: {
-      maxWidth: '1100px',
-      margin: '20px auto 60px',
+      maxWidth: '1200px',
+      margin: '0 auto',
       padding: '0 20px',
     },
     cardGrid: {
@@ -67,93 +61,67 @@ function App() {
       gap: '30px',
     },
     card: {
-      backgroundColor: '#fff',
+      backgroundColor: 'rgba(255, 255, 255, 0.85)', // 半透明白，透出背景
       borderRadius: '25px',
-      padding: '35px',
-      boxShadow: '0 12px 30px rgba(141, 119, 101, 0.1)',
-      border: '1.5px solid #f1ede4',
-      position: 'relative',
-      overflow: 'hidden'
+      padding: '30px',
+      border: '1.5px solid #e0e0e0',
+      boxShadow: '0 8px 20px rgba(0,0,0,0.05)',
+      backdropFilter: 'blur(5px)', // 玻璃擬態效果
     },
     cardHeader: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '25px',
-      borderBottom: '2px solid #d4c5b9',
-      paddingBottom: '12px',
+      marginBottom: '20px',
+      borderBottom: '2px solid #a63a3a',
+      paddingBottom: '10px',
     },
-    // 分類圖示：圓形裁切效果
-    cardIconWrapper: {
-      width: '60px',
-      height: '60px',
-      borderRadius: '50%',
-      overflow: 'hidden',
-      marginRight: '15px',
-      border: '2px solid #f1ede4'
-    },
-    cardIconImg: {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover'
-    },
-    cardTitle: { color: '#5d4037', fontSize: '1.6rem', margin: 0, fontWeight: 'bold' },
+    cardIcon: { width: '50px', height: '50px', marginRight: '15px', borderRadius: '50%' },
+    cardTitle: { color: '#a63a3a', fontSize: '1.5rem', margin: 0 },
 
-    // 品項樣式
-    itemRow: { marginBottom: '20px' },
+    itemRow: { marginBottom: '15px' },
     itemMain: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
-    itemName: { fontWeight: 'bold', fontSize: '1.15rem', color: '#333' },
-    itemNote: { color: '#999', fontSize: '0.85rem', marginLeft: '5px' },
-    itemPrice: { fontWeight: 'bold', color: '#a63a3a', fontSize: '1.2rem' },
-    itemOptions: { color: '#8d7765', fontSize: '0.85rem', marginTop: '5px', fontStyle: 'italic' },
+    itemName: { fontWeight: 'bold', fontSize: '1.1rem' },
+    itemPrice: { fontWeight: 'bold', color: '#a63a3a' },
 
-    // 3. 尾部設計：加入小雞告示牌插圖
+    // --- 底部浮水印文字疊加設計 ---
     footer: {
-      backgroundColor: '#f1ede4',
-      padding: '60px 20px',
-      textAlign: 'center',
-      borderTop: '2px solid #d4c5b9',
-      position: 'relative',
-    },
-    footerContent: { 
-      maxWidth: '800px', 
-      margin: '0 auto',
+      marginTop: '80px',
       display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
       justifyContent: 'center',
-      flexWrap: 'wrap',
-      gap: '30px'
+      padding: '0 20px'
     },
-    footerIllust: {
-      width: '180px',
+    footerContainer: {
+      position: 'relative', // 讓內部文字可以相對於圖片定位
+      width: '100%',
+      maxWidth: '600px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    footerImg: {
+      width: '100%',
       height: 'auto',
-      borderRadius: '15px',
-      boxShadow: '5px 5px 15px rgba(0,0,0,0.05)'
+      borderRadius: '20px',
+      opacity: 0.9
     },
-    footerInfo: { textAlign: 'left', minWidth: '280px' },
-    footerTitle: { color: '#a63a3a', fontSize: '1.3rem', marginBottom: '15px', fontWeight: 'bold' },
-    lineNotice: {
-      display: 'inline-block',
-      padding: '6px 20px',
-      backgroundColor: '#5d4037',
-      color: '#fff',
-      borderRadius: '8px',
-      marginTop: '15px',
-      fontSize: '0.9rem'
+    footerOverlay: {
+      position: 'absolute', // 絕對定位，文字浮在圖片上
+      textAlign: 'center',
+      width: '70%', // 限制文字寬度在告示牌留白處
+      color: '#5d4037',
+      fontWeight: 'bold',
+      pointerEvents: 'none', // 確保不會干擾滑鼠行為
+      fontSize: 'clamp(0.8rem, 2.5vw, 1.1rem)' // RWD 字體：隨螢幕縮放
     }
   };
 
-  if (loading) return (
-    <div style={{height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fdfcf8', color: '#a63a3a', fontSize: '1.2rem'}}>
-      🏮 溫灶咖正在生火中...
-    </div>
-  );
+  if (loading) return <div style={{textAlign:'center', marginTop:'100px'}}>🏮 溫灶咖生火中...</div>;
 
   return (
     <div style={styles.wrapper}>
       <header style={styles.header}>
         <h1 style={styles.title}>溫 灶 咖</h1>
-        <p style={styles.subTitle}>ベビーカステラ | 手作雞蛋糕專賣</p>
+        <p style={{color:'#8d7765', letterSpacing:'2px'}}>ベビーカステラ | 手作雞蛋糕</p>
       </header>
 
       <main style={styles.main}>
@@ -161,41 +129,36 @@ function App() {
           {data.menu && data.menu.map((cat, idx) => (
             <div key={idx} style={styles.card}>
               <div style={styles.cardHeader}>
-                <div style={styles.cardIconWrapper}>
-                  <img src={CAT_ICON_ALL} alt="icon" style={styles.cardIconImg} />
-                </div>
+                <img src={CAT_ICONS[idx]} alt="icon" style={styles.cardIcon} />
                 <h2 style={styles.cardTitle}>{cat.category}</h2>
               </div>
               {cat.items && cat.items.map((item, i) => (
                 <div key={i} style={styles.itemRow}>
                   <div style={styles.itemMain}>
-                    <span style={styles.itemName}>
-                      {item.name}
-                      {item.note && <span style={styles.itemNote}>({item.note})</span>}
-                    </span>
-                    <span style={styles.itemPrice}>{item.price ? `$${item.price}` : '--'}</span>
+                    <span>{item.name} <small style={{color:'#999'}}>{item.note}</small></span>
+                    <span style={styles.itemPrice}>${item.price || '--'}</span>
                   </div>
-                  {item.options && item.options.length > 0 && (
-                    <div style={styles.itemOptions}>○ {item.options.join(' / ')}</div>
-                  )}
                 </div>
               ))}
             </div>
           ))}
         </div>
-      </main>
 
-      <footer style={styles.footer}>
-        <div style={styles.footerContent}>
-          <div style={styles.footerInfo}>
-            <h3 style={styles.footerTitle}>{data.shopInfo.description}</h3>
-            <p style={{margin: '5px 0'}}>📍 {data.shopInfo.address}</p>
-            <div style={styles.lineNotice}>📲 {data.shopInfo.lineNotice}</div>
+        {/* --- 底部商家資訊：文字疊加在圖片上 --- */}
+        <footer style={styles.footer}>
+          <div style={styles.footerContainer}>
+            <img src={FOOTER_BG} alt="footer background" style={styles.footerImg} />
+            <div style={styles.footerOverlay}>
+              <p style={{marginBottom: '10px'}}>{data.shopInfo.description}</p>
+              <p>📍 {data.shopInfo.address}</p>
+              <p style={{marginTop: '10px', fontSize: '1.2em', color: '#a63a3a'}}>
+                || {data.shopInfo.lineNotice} ||
+              </p>
+              <p style={{fontSize: '0.7em', color: '#bbb', marginTop: '15px'}}>© 2026 Wen Kitchen</p>
+            </div>
           </div>
-          <img src={FOOTER_ILLUST} alt="小雞告示牌" style={styles.footerIllust} />
-        </div>
-        <p style={{fontSize: '0.8rem', marginTop: '40px', color: '#aaa'}}>© 2026 Wen Kitchen 溫灶咖</p>
-      </footer>
+        </footer>
+      </main>
     </div>
   );
 }
